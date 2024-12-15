@@ -23,3 +23,4 @@ interface RecetaDao {
     @Query("SELECT * FROM recetas")
     suspend fun getAllRecetas(): List<Receta>
 }
+
