@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,49 +27,66 @@ fun RecetaListScreen(viewModel: RecetaViewModel) {
     val openDialog = remember { mutableStateOf(false) }
     val recetaToEdit = remember { mutableStateOf<Receta?>(null) }
 
+    // Cargar recetas al iniciar
+    LaunchedEffect(Unit) {
+        viewModel.loadRecetas()
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Recetas de Comida") })
         },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    recetaToEdit.value = null // Al hacer clic, queremos agregar una nueva receta
-                    openDialog.value = true
-                },
-                content = { Text("+") }
-            )
-        },
         content = { paddingValues ->
-            LazyColumn(modifier = Modifier.padding(paddingValues)) {
-                items(recetas.value) { receta ->
-                    RecetaItem(
-                        receta = receta,
-                        onEdit = { recetaToEdit.value = it; openDialog.value = true },
-                        onDelete = {
-                            viewModel.deleteReceta(it)
-                        }
+            Box(modifier = Modifier.fillMaxSize()) {
+                // Lista de recetas
+                LazyColumn(modifier = Modifier.padding(paddingValues)) {
+                    items(recetas.value) { receta ->
+                        RecetaItem(
+                            receta = receta,
+                            onEdit = { recetaToEdit.value = it; openDialog.value = true },
+                            onDelete = {
+                                viewModel.deleteReceta(it)
+                            }
+                        )
+                    }
+                }
+
+                Button(
+                    onClick = {
+                        recetaToEdit.value = null // Preparar para añadir nueva receta
+                        openDialog.value = true
+                    },
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(16.dp) // Margen inferior
+                        .fillMaxWidth(0.8f), // Tamaño del botón (80% del ancho)
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onBackground)
+                ) {
+                    Text(
+                        text = "Añadir Receta",
                     )
                 }
-            }
 
-            if (openDialog.value) {
-                RecetaDialog(
-                    receta = recetaToEdit.value,
-                    onSave = { receta ->
-                        if (recetaToEdit.value == null) {
-                            viewModel.addReceta(receta) // Añadir receta
-                        } else {
-                            viewModel.updateReceta(receta) // Editar receta
-                        }
-                        openDialog.value = false // Cerrar el diálogo
-                    },
-                    onCancel = { openDialog.value = false } // Cancelar acción
-                )
+
+                if (openDialog.value) {
+                    RecetaDialog(
+                        receta = recetaToEdit.value,
+                        onSave = { receta ->
+                            if (recetaToEdit.value == null) {
+                                viewModel.addReceta(receta) // Añadir receta
+                            } else {
+                                viewModel.updateReceta(receta) // Editar receta
+                            }
+                            openDialog.value = false // Cerrar el diálogo
+                        },
+                        onCancel = { openDialog.value = false } // Cancelar acción
+                    )
+                }
             }
         }
     )
 }
+
 
 
 @Composable
