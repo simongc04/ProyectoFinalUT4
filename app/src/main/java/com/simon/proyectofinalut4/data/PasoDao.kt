@@ -1,15 +1,15 @@
 package com.simon.proyectofinalut4.data
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface PasoDao {
 
     @Insert
     suspend fun insert(paso: Paso)
+
+    @Update
+    suspend fun update(paso: Paso)
 
     @Delete
     suspend fun delete(paso: Paso)
