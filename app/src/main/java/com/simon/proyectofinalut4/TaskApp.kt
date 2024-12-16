@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.simon.proyectofinalut4.data.Ingrediente
+import com.simon.proyectofinalut4.data.Paso
 import com.simon.proyectofinalut4.data.Receta
 import com.simon.proyectofinalut4.view.RecetaViewModel
 import com.simon.proyectofinalut4.view.RecetaViewModelFactory
@@ -74,13 +75,13 @@ fun RecetaListScreen(viewModel: RecetaViewModel) {
                         receta = recetaToEdit.value,
                         onSave = { receta ->
                             if (recetaToEdit.value == null) {
-                                viewModel.addReceta(receta) // Añadir receta
+                                viewModel.addReceta(receta)
                             } else {
-                                viewModel.updateReceta(receta) // Editar receta
+                                viewModel.updateReceta(receta)
                             }
-                            openDialog.value = false // Cerrar el diálogo
+                            openDialog.value = false
                         },
-                        onCancel = { openDialog.value = false } // Cancelar acción
+                        onCancel = { openDialog.value = false }
                     )
                 }
             }
@@ -93,12 +94,14 @@ fun RecetaListScreen(viewModel: RecetaViewModel) {
 @Composable
 fun RecetaDialog(
 
+
     receta: Receta?,
     onSave: (Receta) -> Unit,
     onCancel: () -> Unit
 ) {
     var nombre by remember { mutableStateOf(receta?.nombre ?: "") }
     var descripcion by remember { mutableStateOf(receta?.descripcion ?: "") }
+
 
     AlertDialog(
         onDismissRequest = onCancel,
@@ -152,10 +155,22 @@ fun RecetaItem(
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
-            Text(text = receta.nombre)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = receta.descripcion)
+            // Sección de Nombre
+            Text(text = "Nombre: ${receta.nombre}")
 
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Sección de Descripción
+            Text(text = "Pasos: ${receta.descripcion}")
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Sección de botones Editar y Eliminar
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
@@ -169,7 +184,7 @@ fun RecetaItem(
             }
         }
     }
-}
+
 
 
 @Preview(showBackground = true)
@@ -182,7 +197,7 @@ fun DefaultPreview() {
 @Composable
 fun TaskApp() {
     val context = LocalContext.current
-    val applicationContext = context.applicationContext as Application // Cast a Application
+    val applicationContext = context.applicationContext as Application
 
     val viewModel: RecetaViewModel = viewModel(factory = RecetaViewModelFactory(applicationContext))
 
