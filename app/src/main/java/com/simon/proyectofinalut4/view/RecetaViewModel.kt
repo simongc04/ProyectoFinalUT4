@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.MutableLiveData
+import com.simon.proyectofinalut4.data.Paso
 import com.simon.proyectofinalut4.data.Receta
 import kotlinx.coroutines.launch
 
@@ -12,6 +13,7 @@ class RecetaViewModel(application: Application) : AndroidViewModel(application) 
 
     private val repository: RecetaRepository = RecetaRepository(application)
     private val _recetas = MutableLiveData<List<Receta>>()
+    private val _pasos = MutableLiveData<List<Paso>>()
     val recetas: LiveData<List<Receta>> get() = _recetas
 
     fun loadRecetas() {
@@ -41,5 +43,6 @@ class RecetaViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-}
+    }
+
 
