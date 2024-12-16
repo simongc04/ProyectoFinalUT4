@@ -18,5 +18,6 @@ data class Paso(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val descripcion: String,
     val paso: String,
+    val pasoPrincipales: String,
     @ColumnInfo(index = true) val recetaId: Long
 )
