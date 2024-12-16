@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.simon.proyectofinalut4.data.Ingrediente
 import com.simon.proyectofinalut4.data.Receta
 import com.simon.proyectofinalut4.view.RecetaViewModel
 import com.simon.proyectofinalut4.view.RecetaViewModelFactory
@@ -91,6 +92,7 @@ fun RecetaListScreen(viewModel: RecetaViewModel) {
 
 @Composable
 fun RecetaDialog(
+
     receta: Receta?,
     onSave: (Receta) -> Unit,
     onCancel: () -> Unit
@@ -121,7 +123,7 @@ fun RecetaDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    onSave(Receta(nombre = nombre, descripcion = descripcion))
+                    onSave(Receta(id = receta?.id ?: 0, nombre = nombre, descripcion = descripcion)) // Enviar receta con ID si es una edición
                 }
             ) {
                 Text("Guardar")
@@ -134,6 +136,7 @@ fun RecetaDialog(
         }
     )
 }
+
 
 @Composable
 fun RecetaItem(
@@ -181,9 +184,7 @@ fun TaskApp() {
     val context = LocalContext.current
     val applicationContext = context.applicationContext as Application // Cast a Application
 
-    // Usar la fábrica del ViewModel pasando el Application
     val viewModel: RecetaViewModel = viewModel(factory = RecetaViewModelFactory(applicationContext))
 
-    // Ahora pasa el ViewModel a tu Composable RecetaListScreen
     RecetaListScreen(viewModel = viewModel)
 }

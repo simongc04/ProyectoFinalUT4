@@ -1,10 +1,6 @@
 package com.simon.proyectofinalut4.data
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+
 
 import androidx.room.*
 
@@ -22,5 +18,9 @@ interface RecetaDao {
 
     @Query("SELECT * FROM recetas")
     suspend fun getAllRecetas(): List<Receta>
+
+
 }
+
+
 
