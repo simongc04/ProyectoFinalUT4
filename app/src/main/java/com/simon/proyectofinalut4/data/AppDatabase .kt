@@ -6,10 +6,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 
-@Database(entities = [Receta::class, Paso::class], version = 4)
+@Database(entities = [Receta::class, Paso::class, Ingrediente::class], version = 5)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun recetaDao(): RecetaDao
-    abstract fun pasoDao(): PasoDao  // Correctly return PasoDao here
+    abstract fun pasoDao(): PasoDao
+    abstract fun ingredienteDao(): IngredienteDao
 
     companion object {
         @Volatile
