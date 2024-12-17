@@ -93,15 +93,13 @@ fun RecetaListScreen(viewModel: RecetaViewModel) {
 
 @Composable
 fun RecetaDialog(
-
-
     receta: Receta?,
     onSave: (Receta) -> Unit,
     onCancel: () -> Unit
 ) {
     var nombre by remember { mutableStateOf(receta?.nombre ?: "") }
     var descripcion by remember { mutableStateOf(receta?.descripcion ?: "") }
-
+    var pasosPrincipales by remember { mutableStateOf(receta?.pasosPrincipales ?: "") } // Nuevo campo
 
     AlertDialog(
         onDismissRequest = onCancel,
@@ -118,7 +116,14 @@ fun RecetaDialog(
                 OutlinedTextField(
                     value = descripcion,
                     onValueChange = { descripcion = it },
-                    label = { Text("Agregar Receta") },
+                    label = { Text("Descripción") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedTextField(
+                    value = pasosPrincipales,
+                    onValueChange = { pasosPrincipales = it },
+                    label = { Text("Pasos Principales") },
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -126,7 +131,14 @@ fun RecetaDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    onSave(Receta(id = receta?.id ?: 0, nombre = nombre, descripcion = descripcion)) // Enviar receta con ID si es una edición
+                    onSave(
+                        Receta(
+                            id = receta?.id ?: 0,
+                            nombre = nombre,
+                            descripcion = descripcion,
+                            pasosPrincipales = pasosPrincipales // Guardar el nuevo campo
+                        )
+                    )
                 }
             ) {
                 Text("Guardar")
@@ -152,25 +164,13 @@ fun RecetaItem(
             .fillMaxWidth()
             .padding(8.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            // Sección de Nombre
+        Column(modifier = Modifier.padding(16.dp)) {
             Text(text = "Nombre: ${receta.nombre}")
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Sección de Descripción
-            Text(text = "Pasos: ${receta.descripcion}")
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // Sección de botones Editar y Eliminar
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(text = "Receta: ${receta.descripcion}")
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(text = "Pasos Principales: ${receta.pasosPrincipales}")
+            Spacer(modifier = Modifier.height(10.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
@@ -184,6 +184,7 @@ fun RecetaItem(
             }
         }
     }
+}
 
 
 

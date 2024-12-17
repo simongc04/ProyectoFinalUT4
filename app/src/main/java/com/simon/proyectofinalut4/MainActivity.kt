@@ -16,7 +16,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ProyectoFinalUT4Theme {
-                RecetaListScreen(viewModel = recetaViewModel)
+                RecetaListScreen(viewModel = recetaViewModel,)
             }
         }
     }
