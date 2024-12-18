@@ -1,4 +1,4 @@
-package com.simon.proyectofinalut4
+package com.simon.proyectofinalut4.viewModel
 
 import android.app.Application
 import androidx.compose.foundation.layout.*
@@ -16,8 +16,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.simon.proyectofinalut4.data.Ingrediente
-import com.simon.proyectofinalut4.data.Paso
 import com.simon.proyectofinalut4.data.Receta
 import com.simon.proyectofinalut4.view.RecetaViewModel
 import com.simon.proyectofinalut4.view.RecetaViewModelFactory
