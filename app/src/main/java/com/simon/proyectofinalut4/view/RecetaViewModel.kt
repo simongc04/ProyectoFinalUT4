@@ -32,6 +32,8 @@ class RecetaViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch {
             repository.addReceta(receta)
             loadRecetas()
+            if (!mediaPlayer.isPlaying) {
+                mediaPlayer.start()
 
             getApplication<Application>().let { context ->
                 NotificationUtils.showNotification(
@@ -43,7 +45,7 @@ class RecetaViewModel(application: Application) : AndroidViewModel(application) 
                 Toast.makeText(context, "Receta '${receta.nombre}' añadida", Toast.LENGTH_SHORT).show()
             }
         }
-    }
+    } }
 
 
     fun updateReceta(receta: Receta) {
