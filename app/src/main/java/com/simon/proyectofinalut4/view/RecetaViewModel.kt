@@ -2,10 +2,12 @@ package com.simon.proyectofinalut4.view
 
 import android.app.Application
 import android.media.MediaPlayer
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.MutableLiveData
+import com.simon.proyectofinalut4.notify.NotificationUtils
 import com.simon.proyectofinalut4.R
 import com.simon.proyectofinalut4.data.Receta
 import kotlinx.coroutines.launch
@@ -30,11 +32,19 @@ class RecetaViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch {
             repository.addReceta(receta)
             loadRecetas()
-            if (!mediaPlayer.isPlaying) {
-                mediaPlayer.start()
+
+            getApplication<Application>().let { context ->
+                NotificationUtils.showNotification(
+                    context,
+                    "Nueva Receta",
+                    "Se ha creado: ${receta.nombre}"
+                )
+
+                Toast.makeText(context, "Receta '${receta.nombre}' añadida", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 
     fun updateReceta(receta: Receta) {
         viewModelScope.launch {
