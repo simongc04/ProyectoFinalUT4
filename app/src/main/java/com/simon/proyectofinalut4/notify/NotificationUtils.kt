@@ -9,8 +9,8 @@ import com.simon.proyectofinalut4.R
 
 object NotificationUtils {
 
-    private const val CHANNEL_ID = "receta_channel"
-    private const val CHANNEL_NAME = "Notificación de Recetas"
+    private const val canal_id = "recetas_simon"
+    private const val canal_nombre = "Notificación de Recetas"
 
     fun showNotification(context: Context, title: String, message: String) {
         val notificationManager =
@@ -18,11 +18,11 @@ object NotificationUtils {
 
         // Crear el canal de notificación para Android O y superior
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
+            val channel = NotificationChannel(canal_id, canal_nombre, NotificationManager.IMPORTANCE_DEFAULT)
             notificationManager.createNotificationChannel(channel)
         }
 
-        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+        val notification = NotificationCompat.Builder(context, canal_id)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle(title)
             .setContentText(message)
