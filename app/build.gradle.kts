@@ -43,6 +43,9 @@ android {
 
 dependencies {
     implementation (libs.material)
+    implementation (libs.androidx.core.ktx.v1120)
+
+
 
     implementation(libs.ui) // Para la UI de Compose
     implementation(libs.material3) // Para Material3
@@ -53,6 +56,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx) // Para soporte con Lifecycle
     implementation(libs.androidx.lifecycle.viewmodel.compose) // Para usar ViewModel con Compose
     implementation(libs.androidx.activity.compose.v172) // Para usar Composables en Activities
+    implementation (libs.androidx.ui.v130)
+
 
     // Room Database
     ksp (libs.androidx.room.compiler.v250) // Para el compilador de Room (KAPT)
