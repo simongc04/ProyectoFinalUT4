@@ -1,25 +1,19 @@
 package com.simon.proyectofinalut4.data
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
-
+import androidx.room.*
 
 @Dao
 interface IngredienteDao {
 
     @Insert
-    suspend fun insert(ingrediente: Ingrediente)
+    suspend fun insertIngrediente(ingrediente: Ingrediente)
 
     @Update
-    suspend fun update(ingrediente: Ingrediente)
-
+    suspend fun updateIngrediente(ingrediente: Ingrediente)
 
     @Delete
-    suspend fun delete(ingrediente: Ingrediente)
+    suspend fun deleteIngrediente(ingrediente: Ingrediente)
 
     @Query("SELECT * FROM ingredientes WHERE recetaId = :recetaId")
-    suspend fun getByRecetaId(recetaId: Long): List<Ingrediente>
+    suspend fun getIngredientesByRecetaId(recetaId: Long): List<Ingrediente>
 }

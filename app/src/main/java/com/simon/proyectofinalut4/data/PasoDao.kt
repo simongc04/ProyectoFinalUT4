@@ -6,14 +6,14 @@ import androidx.room.*
 interface PasoDao {
 
     @Insert
-    suspend fun insert(paso: Paso)
+    suspend fun insertPaso(paso: Paso)
 
     @Update
-    suspend fun update(paso: Paso)
+    suspend fun updatePaso(paso: Paso)
 
     @Delete
-    suspend fun delete(paso: Paso)
+    suspend fun deletePaso(paso: Paso)
 
     @Query("SELECT * FROM pasos WHERE recetaId = :recetaId")
-    suspend fun getByRecetaId(recetaId: Long): List<Paso>
+    suspend fun getPasosByRecetaId(recetaId: Long): List<Paso>
 }

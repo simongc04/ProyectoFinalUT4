@@ -5,8 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-
-@Database(entities = [Receta::class, Paso::class, Ingrediente::class], version = 6)
+@Database(entities = [Receta::class, Paso::class, Ingrediente::class], version = 8)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun recetaDao(): RecetaDao
     abstract fun pasoDao(): PasoDao
@@ -31,4 +30,3 @@ abstract class AppDatabase : RoomDatabase() {
         }
     }
 }
-
