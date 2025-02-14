@@ -1,10 +1,14 @@
 # Recetas Comidas
 
 
-La aplicación es una herramienta para gestionar recetas de cocina, diseñada en Kotlin con Jetpack Compose y Room como base de datos. Sirve como un ejemplo sólido de cómo implementar una app CRUD (Crear, Leer, Actualizar, Eliminar) funcional en Android utilizando tecnologías modernas.🚀🚀
+Este proyecto es una aplicación de gestión de recetas que permite a los usuarios agregar, editar y eliminar recetas, así como gestionar los ingredientes y pasos asociados a cada receta. Utiliza Jetpack Compose para la interfaz de usuario, ViewModel para la lógica de negocio, y Room para la persistencia de datos. Además, incluye notificaciones y sonidos para mejorar la experiencia del usuario.🚀🚀
 
 ### APP:
 
-![image](https://github.com/user-attachments/assets/4a60aefd-8c2b-4b4e-9d64-cef7ed845680)
-![image](https://github.com/user-attachments/assets/e47bced2-64a4-4c73-a136-d44e215eb24c)
-![image](https://github.com/user-attachments/assets/b7f5eb16-95d3-4177-b83c-2ebd6513dd5b)
+![image](https://github.com/user-attachments/assets/f7b70ea5-7865-4358-bda7-46e336c97877)
+
+#### añadir receta:
+![image](https://github.com/user-attachments/assets/10eb57b4-8ce2-498e-a0f2-0908b42305da)
+
+#### una vez agregada:
+![image](https://github.com/user-attachments/assets/930a4e83-5b14-40e5-8250-b60e6d2126f3)
