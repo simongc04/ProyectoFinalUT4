@@ -1,10 +1,12 @@
 package com.simon.proyectofinalut4.viewModel
 
 import android.app.Application
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
@@ -12,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,39 +39,39 @@ fun RecetaListScreen(viewModel: ViewModel) {
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Recetas de Comida") })
+            TopAppBar(
+                title = { Text("Recetas de Comida", style = MaterialTheme.typography.headlineMedium) },
+                colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = Color.Red)
+            )
         },
         content = { paddingValues ->
-            Box(modifier = Modifier.fillMaxSize()) {
+            Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
                 // Lista de recetas
-                LazyColumn(modifier = Modifier.padding(paddingValues)) {
+                LazyColumn(modifier = Modifier.padding(16.dp)) {
                     items(recetas.value) { receta ->
                         RecetaItem(
                             receta = receta,
                             viewModel = viewModel,
                             onEdit = { recetaToEdit.value = it; openDialog.value = true },
-                            onDelete = {
-                                viewModel.deleteReceta(it)
-                            }
+                            onDelete = { viewModel.deleteReceta(it) }
                         )
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
 
-                Button(
+                ExtendedFloatingActionButton(
                     onClick = {
                         recetaToEdit.value = null // Preparar para añadir nueva receta
                         openDialog.value = true
                     },
                     modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(16.dp) // Margen inferior
-                        .fillMaxWidth(0.8f), // Tamaño del botón (80% del ancho)
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onBackground)
-                ) {
-                    Text(
-                        text = "Añadir Receta",
-                    )
-                }
+                        .align(Alignment.BottomEnd)
+                        .padding(16.dp),
+                    icon = { Icon(Icons.Default.Add, contentDescription = "Añadir Receta", tint = Color.White) },
+                    text = { Text("Añadir Receta", color = Color.White) },
+                    containerColor = Color.Red,
+                    contentColor = Color.White
+                )
 
                 if (openDialog.value) {
                     RecetaDialog(
@@ -101,32 +104,24 @@ fun RecetaDialog(
         onDismissRequest = onCancel,
         title = { Text(text = if (receta == null) "Agregar receta" else "Editar receta") },
         text = {
-            Column {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 OutlinedTextField(
                     value = nombre,
                     onValueChange = { nombre = it },
                     label = { Text("Nombre") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium
                 )
             }
         },
         confirmButton = {
-            TextButton(
-                onClick = {
-                    onSave(
-                        Receta(
-                            id = receta?.id ?: 0,
-                            nombre = nombre,
-                        )
-                    )
-                }
-            ) {
-                Text("Guardar")
+            TextButton(onClick = { onSave(Receta(id = receta?.id ?: 0, nombre = nombre)) }) {
+                Text("Guardar", color = Color.Red)
             }
         },
         dismissButton = {
             TextButton(onClick = onCancel) {
-                Text("Cancelar")
+                Text("Cancelar", color = Color.Red)
             }
         }
     )
@@ -152,19 +147,20 @@ fun RecetaItem(
         viewModel.loadIngredientes(receta.id)
     }
 
-    // Asegúrate de que la UI se actualiza cuando los datos cambian
-    LaunchedEffect(pasos, ingredientes) {
-        // Aquí puedes añadir logs para verificar que los datos se están cargando correctamente
-    }
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
+            .animateContentSize(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        shape = MaterialTheme.shapes.medium,
+        colors = CardDefaults.cardColors(containerColor = Color.LightGray)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "Nombre: ${receta.nombre}")
-            Text(text = "Ingredientes:", style = MaterialTheme.typography.titleMedium)
+            Text(text = receta.nombre, style = MaterialTheme.typography.headlineSmall, color = Color.Red)
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(text = "Ingredientes:", style = MaterialTheme.typography.titleMedium, color = Color.Red)
             ingredientes.forEach { ingrediente ->
                 IngredienteItem(
                     ingrediente = ingrediente,
@@ -172,7 +168,9 @@ fun RecetaItem(
                     onDelete = { viewModel.deleteIngrediente(it) }
                 )
             }
-            Text(text = "Pasos:", style = MaterialTheme.typography.titleMedium)
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(text = "Pasos:", style = MaterialTheme.typography.titleMedium, color = Color.Red)
             pasos.forEach { paso ->
                 PasoItem(
                     paso = paso,
@@ -180,15 +178,17 @@ fun RecetaItem(
                     onDelete = { viewModel.deletePaso(it) }
                 )
             }
+            Spacer(modifier = Modifier.height(12.dp))
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
                 IconButton(onClick = { onEdit(receta) }) {
-                    Icon(imageVector = Icons.Default.Edit, contentDescription = "Editar receta")
+                    Icon(imageVector = Icons.Default.Edit, contentDescription = "Editar receta", tint = Color.Red)
                 }
                 IconButton(onClick = { onDelete(receta) }) {
-                    Icon(imageVector = Icons.Default.Delete, contentDescription = "Eliminar receta")
+                    Icon(imageVector = Icons.Default.Delete, contentDescription = "Eliminar receta", tint = Color.Red)
                 }
             }
             Row(
@@ -200,18 +200,22 @@ fun RecetaItem(
                         ingredienteToEdit.value = Ingrediente(nombre = "", cantidad = "", recetaId = receta.id)
                         openIngredienteDialog.value = true
                     },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    shape = MaterialTheme.shapes.medium,
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
                 ) {
-                    Text("Añadir Ingrediente")
+                    Text("Añadir Ingrediente", color = Color.White)
                 }
                 Button(
                     onClick = {
                         pasoToEdit.value = Paso(descripcion = "", recetaId = receta.id)
                         openPasoDialog.value = true
                     },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    shape = MaterialTheme.shapes.medium,
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
                 ) {
-                    Text("Añadir Paso")
+                    Text("Añadir Paso", color = Color.White)
                 }
             }
         }
@@ -258,18 +262,22 @@ fun PasoItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
+            .animateContentSize(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        shape = MaterialTheme.shapes.medium,
+        colors = CardDefaults.cardColors(containerColor = Color.LightGray)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "Descripción: ${paso.descripcion}")
+            Text(text = paso.descripcion, style = MaterialTheme.typography.bodyMedium, color = Color.Red)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
                 IconButton(onClick = { onEdit(paso) }) {
-                    Icon(imageVector = Icons.Default.Edit, contentDescription = "Editar paso")
+                    Icon(imageVector = Icons.Default.Edit, contentDescription = "Editar paso", tint = Color.Red)
                 }
                 IconButton(onClick = { onDelete(paso) }) {
-                    Icon(imageVector = Icons.Default.Delete, contentDescription = "Eliminar paso")
+                    Icon(imageVector = Icons.Default.Delete, contentDescription = "Eliminar paso", tint = Color.Red)
                 }
             }
         }
@@ -288,33 +296,24 @@ fun PasoDialog(
         onDismissRequest = onCancel,
         title = { Text(text = if (paso == null) "Agregar paso" else "Editar paso") },
         text = {
-            Column {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 OutlinedTextField(
                     value = descripcion,
                     onValueChange = { descripcion = it },
                     label = { Text("Descripción") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium
                 )
             }
         },
         confirmButton = {
-            TextButton(
-                onClick = {
-                    onSave(
-                        Paso(
-                            id = paso?.id ?: 0,
-                            descripcion = descripcion,
-                            recetaId = paso?.recetaId ?: 0
-                        )
-                    )
-                }
-            ) {
-                Text("Guardar")
+            TextButton(onClick = { onSave(Paso(id = paso?.id ?: 0, descripcion = descripcion, recetaId = paso?.recetaId ?: 0)) }) {
+                Text("Guardar", color = Color.Red)
             }
         },
         dismissButton = {
             TextButton(onClick = onCancel) {
-                Text("Cancelar")
+                Text("Cancelar", color = Color.Red)
             }
         }
     )
@@ -330,19 +329,23 @@ fun IngredienteItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
+            .animateContentSize(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        shape = MaterialTheme.shapes.medium,
+        colors = CardDefaults.cardColors(containerColor = Color.LightGray)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "Nombre: ${ingrediente.nombre}")
-            Text(text = "Cantidad: ${ingrediente.cantidad}")
+            Text(text = "Nombre: ${ingrediente.nombre}", style = MaterialTheme.typography.bodyMedium, color = Color.Red)
+            Text(text = "Cantidad: ${ingrediente.cantidad}", style = MaterialTheme.typography.bodyMedium, color = Color.Red)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
                 IconButton(onClick = { onEdit(ingrediente) }) {
-                    Icon(imageVector = Icons.Default.Edit, contentDescription = "Editar ingrediente")
+                    Icon(imageVector = Icons.Default.Edit, contentDescription = "Editar ingrediente", tint = Color.Red)
                 }
                 IconButton(onClick = { onDelete(ingrediente) }) {
-                    Icon(imageVector = Icons.Default.Delete, contentDescription = "Eliminar ingrediente")
+                    Icon(imageVector = Icons.Default.Delete, contentDescription = "Eliminar ingrediente", tint = Color.Red)
                 }
             }
         }
@@ -362,40 +365,31 @@ fun IngredienteDialog(
         onDismissRequest = onCancel,
         title = { Text(text = if (ingrediente == null) "Agregar ingrediente" else "Editar ingrediente") },
         text = {
-            Column {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 OutlinedTextField(
                     value = nombre,
                     onValueChange = { nombre = it },
                     label = { Text("Nombre") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium
                 )
                 OutlinedTextField(
                     value = cantidad,
                     onValueChange = { cantidad = it },
                     label = { Text("Cantidad") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium
                 )
             }
         },
         confirmButton = {
-            TextButton(
-                onClick = {
-                    onSave(
-                        Ingrediente(
-                            id = ingrediente?.id ?: 0,
-                            nombre = nombre,
-                            cantidad = cantidad,
-                            recetaId = ingrediente?.recetaId ?: 0
-                        )
-                    )
-                }
-            ) {
-                Text("Guardar")
+            TextButton(onClick = { onSave(Ingrediente(id = ingrediente?.id ?: 0, nombre = nombre, cantidad = cantidad, recetaId = ingrediente?.recetaId ?: 0)) }) {
+                Text("Guardar", color = Color.Red)
             }
         },
         dismissButton = {
             TextButton(onClick = onCancel) {
-                Text("Cancelar")
+                Text("Cancelar", color = Color.Red)
             }
         }
     )
